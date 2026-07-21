@@ -1,0 +1,55 @@
+name: Integration
+
+on:
+  merge:
+    branches:
+      - main
+  schedule:
+    - cron: "0 2 * * *"
+
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Build Integration Image
+        run: |
+          docker compose \
+            -f docker/compose.integration.yml \
+            build
+      
+      - name: Start Integration Environment
+        run: |
+          docker compose \
+            -f docker/compose.integration.yml \
+            up -d
+      
+      - name: Wait for Limina
+        run: |
+          ./scripts/wait-for-limina.sh https://localhost:8080 30
+      
+      - name: Run Integration Tests
+        run: |
+          ./scripts/run-integration.sh
+
+      - name: Collect Logs
+        run: |
+          docker compose \
+            -f docker/compose.integration.yml \
+            logs
+
+      - name: Shutdown Environment
+        if: always()
+        run: |
+          docker compose \
+            -f docker/compose.integration.yml \
+            down
