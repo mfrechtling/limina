@@ -1,7 +1,7 @@
 name: Integration
 
 on:
-  merge:
+  push:
     branches:
       - main
   schedule:
