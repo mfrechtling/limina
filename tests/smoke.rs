@@ -21,7 +21,8 @@ fn application_starts_and_serves_http() {
 
     let body = response.text().unwrap();
 
-    assert_eq!(body, "Hello limina");
+    assert_eq!(body, "Hello limina\n");
 
     server.kill().ok();
+    server.wait().ok();
 }

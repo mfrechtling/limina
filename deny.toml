@@ -1,7 +1,7 @@
 [advisories]
 ignore = []
 
-[licences]
+[licenses]
 allow = ["MIT", "Apache-2.0", "BSD-3-Clause", "ISC"]
 
 [bans]
@@ -9,4 +9,4 @@ multiple-versions = "warn"
 
 [sources]
 unknown-registry = "deny"
-unkown-git = "deny"
+unknown-git = "deny"
