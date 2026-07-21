@@ -47,7 +47,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Build
-        uses: cargo build --release
+        run: cargo build --release
 
       - name: Package Binary
         run: |
