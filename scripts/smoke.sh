@@ -17,4 +17,4 @@ trap cleanup EXIT
 
 response=$(curl -s http://localhost:8080)
 
-test "$response" = "Hello Limina"
+test "$response" = "Hello limina"
