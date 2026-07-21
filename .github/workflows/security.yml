@@ -1,0 +1,48 @@
+name: Security Testing
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+  pull_request:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  security_audit:
+    name: Security & Code Quality Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
+
+      - name: Audit Check
+        run: cargo audit
+
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
+
+      - name: Deny Check
+        run: cargo deny check
+
+      - name: Clippy Security Checks
+        run: cargo clippy --all-targets -- -D warnings
