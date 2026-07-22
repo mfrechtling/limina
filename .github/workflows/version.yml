@@ -1,0 +1,48 @@
+name: Version
+
+on:
+  push:
+    branches:
+      - main
+  workflows:
+    - Integration
+  types:
+    - completed
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          branch: main
+          fetch-depth: 0
+      
+      - name: Read cargo version
+        id: version
+        run: |
+          VERSION=$(grep '^version =' Cargo.toml | head -1 | cut -d '"' -f2)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: tag
+        run: |
+          if git rev-parse "v$ {{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create tag
+        if: steps.tag.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
