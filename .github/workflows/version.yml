@@ -16,11 +16,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Validate release token
+        run: |
+          if [ -z "${{ secrets.RELEASE_PAT }}" ]; then
+            echo "RELEASE_PAT secret is missing. Configure repository secret RELEASE_PAT with contents:write access."
+            exit 1
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          branch: main
+          ref: main
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
       
       - name: Read cargo version
         id: version
