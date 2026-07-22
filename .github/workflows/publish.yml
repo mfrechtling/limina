@@ -5,14 +5,16 @@ on:
     tags:
       - "v*"
   
-  workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  validate:
-    name: Validate Release
+  publish:
+    name: Publish Release
     runs-on: ubuntu-latest
 
     steps:
@@ -24,31 +26,23 @@ jobs:
           rustup toolchain install stable --profile minimal
           rustup default stable
 
-      - name: Format
-        run: cargo fmt --all --check
-      
-      - name: Clippy
-        run: cargo clippy --all-targets -- -D warnings
+      - name: Verify version matches tag
+        run: |
+          VERSION=$(grep '^version =' Cargo.toml | head -1 | cut -d '"' -f2)
+          TAG=${GITHUB_REF_NAME#v}
+          test "$VERSION" = "$TAG"
 
-      - name: Unit Tests
+      - name: Build release
+        run: cargo build --release
+
+      - name: Run tests
         run: cargo test
 
-  build:
-    name: Build Release
-    needs: validate
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Ensure Rust stable toolchain
+      - name: Build Docker Image
         run: |
-          rustup toolchain install stable --profile minimal
-          rustup default stable
-
-      - name: Build
-        run: cargo build --release
+          docker build \
+            -f docker/Dockerfile \
+            -t limina:${{ github.ref_name }} .
 
       - name: Package Binary
         run: |
@@ -58,46 +52,6 @@ jobs:
             dist/limina-linux-x86_64.tar.gz \
             -C target/release \
             limina
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: limina-linux-x86_64
-          path: dist/
-      
-  docker:
-    name: Build Docker Image
-    needs: validate
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Build Image
-        run: |
-          docker build \
-            -f docker/Dockerfile \
-            -t limina:${{ github.ref_name }} .
-
-  release:
-    name: Create GitHub Release
-    needs:
-      - build
-      - docker
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v8
-        with:
-          path: dist
 
       - name: Create Release (gh CLI)
         env:
