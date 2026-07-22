@@ -1,13 +1,11 @@
 name: Version
 
 on:
-  push:
-    branches:
-      - main
-  workflows:
-    - Integration
-  types:
-    - completed
+  workflow_run:
+    workflows:
+      - Integration
+    types:
+      - completed
 
 permissions:
   contents: write
