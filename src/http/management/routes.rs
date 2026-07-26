@@ -16,9 +16,6 @@ pub fn router() -> Router<AppState> {
         .route("/_limina/info", get(handlers::info::info))
         .route("/_limina/metrics", get(handlers::metrics::metrics))
         .route("/_limina/routes", get(handlers::routes::routes))
-        .route(
-            "/_limina/config/validate",
-            post(handlers::config::validate),
-        )
+        .route("/_limina/config/validate", post(handlers::config::validate))
         .route("/_limina/config/reload", post(handlers::config::reload))
 }
