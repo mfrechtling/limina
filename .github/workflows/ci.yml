@@ -29,7 +29,7 @@ jobs:
         run: cargo clippy --all-targets -- -D warnings
 
       - name: Unit Tests
-        run: cargo test -- test unit
+        run: cargo test --test unit
 
       - name: Build Releases
         run: cargo build --release
