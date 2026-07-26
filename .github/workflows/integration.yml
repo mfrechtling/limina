@@ -20,36 +20,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      
-      - name: Build Integration Image
+
+      - name: Ensure Rust stable toolchain
         run: |
-          docker compose \
-            -f docker/compose.integration.yml \
-            build
-      
-      - name: Start Integration Environment
-        run: |
-          docker compose \
-            -f docker/compose.integration.yml \
-            up -d
-      
-      - name: Wait for Limina
-        run: |
-          ./scripts/wait-for-http.sh http://localhost:8080 30
+          rustup toolchain install stable --profile minimal
+          rustup default stable
       
       - name: Run Integration Tests
-        run: |
-          ./scripts/run-integration.sh
-
-      - name: Collect Logs
-        run: |
-          docker compose \
-            -f docker/compose.integration.yml \
-            logs
-
-      - name: Shutdown Environment
-        if: always()
-        run: |
-          docker compose \
-            -f docker/compose.integration.yml \
-            down
+        run: cargo test --test integration
