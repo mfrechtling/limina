@@ -1,5 +1,5 @@
-use axum::extract::State;
 use axum::Json;
+use axum::extract::State;
 use limina::management::endpoints::info;
 use limina::state::AppState;
 

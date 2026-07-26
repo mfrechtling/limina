@@ -1,6 +1,6 @@
+use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
-use axum::Json;
 use limina::management::endpoints::config;
 use limina::state::{AppState, GatewayConfig};
 
@@ -29,7 +29,10 @@ async fn validate_rejects_unknown_mode() {
     .await;
 
     assert_eq!(response.valid, false);
-    assert_eq!(response.errors, vec!["unsupported mode: invalid".to_owned()]);
+    assert_eq!(
+        response.errors,
+        vec!["unsupported mode: invalid".to_owned()]
+    );
 }
 
 #[tokio::test]

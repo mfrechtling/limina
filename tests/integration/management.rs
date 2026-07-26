@@ -128,7 +128,10 @@ fn management_endpoints_contract() {
         .get("http://localhost:8080/_limina/config/validate")
         .send()
         .expect("validate wrong method request failed");
-    assert_eq!(validate_wrong_method.status(), StatusCode::METHOD_NOT_ALLOWED);
+    assert_eq!(
+        validate_wrong_method.status(),
+        StatusCode::METHOD_NOT_ALLOWED
+    );
 
     let reload_wrong_method = client
         .get("http://localhost:8080/_limina/config/reload")

@@ -21,4 +21,3 @@ mod endpoints_routes;
 
 #[path = "unit/endpoints/config.rs"]
 mod endpoints_config;
-
