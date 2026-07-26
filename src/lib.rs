@@ -1,4 +1,6 @@
-pub mod management;
+pub mod app;
+pub mod http;
+pub mod service;
 pub mod state;
 
 pub fn version() -> &'static str {

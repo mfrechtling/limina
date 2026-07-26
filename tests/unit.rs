@@ -1,23 +1,20 @@
-#[path = "unit/common/lib.rs"]
-mod common_lib;
+#[path = "unit/http/management/handlers/config.rs"]
+mod http_management_handlers_config;
 
-#[path = "unit/common/state.rs"]
-mod common_state;
+#[path = "unit/http/management/handlers/core.rs"]
+mod http_management_handlers_core;
 
-#[path = "unit/common/router.rs"]
-mod common_router;
+#[path = "unit/http/management/handlers/info.rs"]
+mod http_management_handlers_info;
 
-#[path = "unit/endpoints/core.rs"]
-mod endpoints_core;
+#[path = "unit/http/management/handlers/metrics.rs"]
+mod http_management_handlers_metrics;
 
-#[path = "unit/endpoints/info.rs"]
-mod endpoints_info;
+#[path = "unit/http/management/handlers/routes.rs"]
+mod http_management_handlers_routes;
 
-#[path = "unit/endpoints/metrics.rs"]
-mod endpoints_metrics;
+#[path = "unit/lib/version.rs"]
+mod lib_version;
 
-#[path = "unit/endpoints/routes.rs"]
-mod endpoints_routes;
-
-#[path = "unit/endpoints/config.rs"]
-mod endpoints_config;
+#[path = "unit/service/http.rs"]
+mod service_http;

@@ -1,6 +1,6 @@
 use axum::Json;
 use axum::extract::State;
-use limina::management::endpoints::routes;
+use limina::http::management::handlers::routes;
 use limina::state::AppState;
 
 #[tokio::test]
