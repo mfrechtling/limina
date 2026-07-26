@@ -16,10 +16,10 @@ fn start_server() -> Child {
 
 fn wait_for_health(client: &Client) {
     for _ in 0..60 {
-        if let Ok(response) = client.get("http://localhost:8080/_limina/health").send() {
-            if response.status() == StatusCode::OK {
-                return;
-            }
+        if let Ok(response) = client.get("http://localhost:8080/_limina/health").send()
+            && response.status() == StatusCode::OK
+        {
+            return;
         }
         thread::sleep(Duration::from_millis(250));
     }

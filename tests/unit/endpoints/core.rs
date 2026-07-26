@@ -21,7 +21,7 @@ async fn health_live_returns_ok() {
 async fn health_ready_returns_ready_true() {
     let Json(response) = health::ready(State(AppState::default())).await;
 
-    assert_eq!(response.ready, true);
+    assert!(response.ready);
 }
 
 #[tokio::test]

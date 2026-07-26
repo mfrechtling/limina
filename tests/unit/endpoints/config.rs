@@ -14,7 +14,7 @@ async fn validate_accepts_supported_mode() {
     )
     .await;
 
-    assert_eq!(response.valid, true);
+    assert!(response.valid);
     assert!(response.errors.is_empty());
 }
 
@@ -28,7 +28,7 @@ async fn validate_rejects_unknown_mode() {
     )
     .await;
 
-    assert_eq!(response.valid, false);
+    assert!(!response.valid);
     assert_eq!(
         response.errors,
         vec!["unsupported mode: invalid".to_owned()]
@@ -48,7 +48,7 @@ async fn reload_updates_state_for_valid_config() {
     .await;
 
     assert_eq!(status, StatusCode::OK);
-    assert_eq!(response.valid, true);
+    assert!(response.valid);
 
     let current_mode = state.current_config.read().await.mode.clone();
     assert_eq!(current_mode, "read-only");
@@ -67,7 +67,7 @@ async fn reload_returns_bad_request_for_invalid_config() {
     .await;
 
     assert_eq!(status, StatusCode::BAD_REQUEST);
-    assert_eq!(response.valid, false);
+    assert!(!response.valid);
 
     let current_mode = state.current_config.read().await.mode.clone();
     assert_eq!(current_mode, "normal");
