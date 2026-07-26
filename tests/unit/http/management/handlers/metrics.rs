@@ -1,5 +1,5 @@
 use axum::extract::State;
-use limina::management::endpoints::metrics;
+use limina::http::management::handlers::metrics;
 use limina::state::AppState;
 
 #[tokio::test]

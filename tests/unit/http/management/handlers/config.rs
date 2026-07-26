@@ -1,7 +1,7 @@
 use axum::Json;
 use axum::extract::State;
 use axum::http::StatusCode;
-use limina::management::endpoints::config;
+use limina::http::management::handlers::config;
 use limina::state::{AppState, GatewayConfig};
 
 #[tokio::test]

@@ -1,7 +1,4 @@
-mod app;
-mod management;
-mod state;
-use app::App;
+use limina::app::App;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

@@ -1,6 +1,7 @@
 use axum::Router;
 use tokio::net::TcpListener;
 
+use crate::service;
 use crate::state::AppState;
 
 pub struct App {
@@ -9,13 +10,13 @@ pub struct App {
 
 impl App {
     pub async fn new() -> Result<Self, Box<dyn std::error::Error>> {
-        let state = AppState::new();
+        Ok(Self::from_state(AppState::new()))
+    }
 
-        let router = Router::<AppState>::new()
-            .merge(crate::management::router::router())
-            .with_state(state);
+    pub fn from_state(state: AppState) -> Self {
+        let router = service::http(state);
 
-        Ok(Self { router })
+        Self { router }
     }
 
     pub async fn run(self) -> Result<(), Box<dyn std::error::Error>> {
